@@ -40,6 +40,8 @@ defmodule EctoTestTest do
 
     assert duty1.name == "Dynamic duty 1"
     assert duty1.role.name == "Role 1"
+    [permission1] = duty1.role.permissions
+    assert permission1.name == "Permission 1"
 
     duty2 =
       o.role2
@@ -48,6 +50,8 @@ defmodule EctoTestTest do
 
     assert duty2.name == "Dynamic duty 2"
     assert duty2.role.name == "Role 2"
+    [permission2] = duty2.role.permissions
+    assert permission2.name == "Permission 2"
   end
 
   test "preloading on a list of duties", o do
@@ -68,10 +72,16 @@ defmodule EctoTestTest do
       |> EctoTest.Repo.preload(duties: [role: [:permissions]])
 
     [duty1, duty2] = user_with_dynamic_duties_and_preloaded_permissions.duties
+
     assert duty1.name == "Dynamic duty 1"
     assert duty1.role.name == "Role 1"
+    [permission1] = duty1.role.permissions
+    assert permission1.name == "Permission 1"
+
     assert duty2.name == "Dynamic duty 2"
     assert duty2.role.name == "Role 2"
+    [permission2] = duty2.role.permissions
+    assert permission2.name == "Permission 2"
   end
 
   def add_dynamic_duties(user, role1, role2) do
@@ -82,6 +92,11 @@ defmodule EctoTestTest do
   end
 
   def new_dynamic_duty(role, user, nr) do
-    %EctoTest.Duty{user: user, name: "Dynamic duty #{nr}", role: role}
+    %EctoTest.Duty{
+      user: user,
+      name: "Dynamic duty #{nr}",
+      role: role,
+      #role_id: role.id
+    }
   end
 end

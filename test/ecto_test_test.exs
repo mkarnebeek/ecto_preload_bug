@@ -32,7 +32,7 @@ defmodule EctoTestTest do
     |> EctoTest.Repo.insert()
   end
 
-  test "preloading on duty", o do
+  test "preloading on a single duty", o do
     duty1 =
       o.role1
       |> new_dynamic_duty(o.user, 1)
@@ -50,7 +50,7 @@ defmodule EctoTestTest do
     assert duty2.role.name == "Role 2"
   end
 
-  test "preloading on user", o do
+  test "preloading on a list of duties", o do
     user_with_dynamic_duties =
       EctoTest.User
       |> EctoTest.Repo.get(o.user.id)
